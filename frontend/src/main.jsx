@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import { ClerkProvider } from '@clerk/clerk-react'
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 
 // Import your publishable key
