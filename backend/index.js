@@ -1,39 +1,53 @@
 import express from 'express';
+const app = express();
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
-import path from 'path';
-import * as url from 'url';
-import { createClient } from '@supabase/supabase-js'
+import conversationRoutes from './routes/conversationRoutes.js';
+import messageRoutes from './routes/messageRoutes.js';
+import { clerkMiddleware } from './middleware/authMiddleware.js';
 
-
-
-// Load environment variables from .env file
 dotenv.config();
 
-const app = express();
+// const app = express();
 
-// Middleware
-app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
+app.use(express.json());
+app.use(clerkMiddleware);
 
+app.use('/api', conversationRoutes);
+app.use('/api', messageRoutes);
 
-
-
-const supabaseUrl = 'https://aqoaciveuarnvkonulpw.supabase.co'
-const supabaseKey = process.env.SUPABASE_KEY
-const supabase = createClient(supabaseUrl, supabaseKey)
-
-// Example route
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
-});
-
-// Start the server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${port}`);  
 });
-
+app.get('/', (req, res) => {
+  res.send('Server is running');
+});
 export default app;
+
+
+
+
+
+
+
+
+// import OpenAI from "openai";
+
+// const openai = new OpenAI({
+//   apiKey: process.env.OPENAI_KEY,
+// });
+
+// async function main() {
+//   const completion = await openai.chat.completions.create({
+//     messages: [{ role: "system", content: "You are a helpful assistant." }],
+//     model: "gpt-4o-mini",
+//   });
+
+//   console.log(completion.choices[0]);
+// }
+
+// main();
