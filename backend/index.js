@@ -2,6 +2,7 @@ import express from 'express';
 const app = express();
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import conversationRoutes from './routes/conversationRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
@@ -13,6 +14,9 @@ dotenv.config();
 
 app.use(cors());
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(clerkMiddleware);
 

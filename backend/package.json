@@ -3,6 +3,7 @@
     "@clerk/clerk-sdk-node": "^5.0.20",
     "@supabase/supabase-js": "^2.45.0",
     "axios": "^1.7.2",
+    "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
