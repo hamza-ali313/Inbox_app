@@ -8,15 +8,12 @@ import OpenAI from "openai";
 dotenv.config();
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
-console.log(process.env.OPENAI_KEY)
-
 export const getMessages = async (req, res) => {
-  const { thread_id } = req.params;
+  // const { thread_id } = req.params;
   const { data, error } = await supabase
     .from('messages')
     .select('*')
-    .eq('thread_id', thread_id);
-
+    // .eq('thread_id', thread_id);
   if (error) return res.status(500).send(error.message);
   res.json(data);
 };
@@ -60,15 +57,23 @@ const openai = new OpenAI({
 export const sendMessage = async (req, res) => {
   const { message } = req.body;
   try {
-    console.log('Received message:', message);
+    const { error } = await supabase
+      .from('messages')
+      .insert([{ sender: 'user', text: message }]);
+    if (error) {
+      console.log("error connecting with supabase_db", error)
+    }
     const stream = await openai.completions.create({
       model: "gpt-3.5-turbo-instruct",
       prompt: message,
       stream: true,
     });
+    let fullResponse = '';
     for await (const chunk of stream) {
-      res.json(chunk.choices[0].text)
+      fullResponse += chunk.choices[0].text;
     }
+    await supabase.from('messages').insert([{ sender: 'ai', text: fullResponse }]);
+    res.json({fullResponse});
   } catch (error) {
     res.status(500).send(error.message);
     console.log('OpenAI error:', error.message);

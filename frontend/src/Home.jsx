@@ -12,7 +12,7 @@ const Home = () => {
                     <Col lg={3} md={3} sm={3}>
                         <ChatList />
                     </Col>
-                    <Col lg={8} md={8} sm={8} className=''>
+                    <Col lg={9} md={9} sm={9} className=''>
                         <ChatWindow />
                         <MessageInput />
                     </Col>
